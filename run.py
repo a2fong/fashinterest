@@ -1,11 +1,11 @@
 #!flask/bin/python
-from flask import Flask
+from flask import Flask, render_template
 from flask_restful import reqparse, abort, Api, Resource, fields, marshal_with
 from sqlalchemy import Table, MetaData, orm, Column, String, Integer, create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 api = Api(app)
 
 Base = declarative_base()
@@ -21,7 +21,7 @@ class FashinDao(Base):
 
     def __init__(self, title, blurb, author, thumbnail_url, details_url):
         self.title = title
-        self.blub = blurb
+        self.blurb = blurb
         self.author = author
         self.thumbnail_url = thumbnail_url
         self.details_url = details_url
@@ -48,12 +48,20 @@ class Fashin(Resource):
         Base.metadata.create_all(engine)
 
         session = Session(engine)
-        f = FashinDao(title="title1", blurb="blurb1", author="author1", thumbnail_url="thumbnail_url1", details_url="details_url1")
-        session.add(f)
+        for x in range(0, 60):
+            title = "title"
+            title += str(x)
+            blurb = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            author = "author"
+            author += str(x)
+            thumb = "http://dzasv7x7a867v.cloudfront.net/product_photos/20073051/98)_60S_5D9FE_7D_5DQ_AE_607YHVN7V_original.jpg"
+            details = "api/fashin?limit=1&page="
+            details += str(x+1)
+            f = FashinDao(title=title, blurb=blurb, author=author, thumbnail_url=thumb, details_url=details)
+            session.add(f)
+
         session.commit()
-        g = FashinDao(title="title2", blurb="blurb2", author="author2", thumbnail_url="thumbnail_url2", details_url="details_url2")
-        session.add(g)
-        session.commit()
+
 
         args = parser.parse_args()
         if args['limit'] is None:
@@ -78,6 +86,10 @@ class Fashin(Resource):
         return fashins
 
 api.add_resource(Fashin, '/api/fashin')
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
