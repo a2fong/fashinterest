@@ -1,7 +1,8 @@
 $(document).ready(function() {
   var page = 1;
   var limit = 20;
-  var end = 0;
+  var end = false;
+  var lock = false;
 
   function loadContent(page, limit) {
       $.ajax({
@@ -12,28 +13,29 @@ $(document).ready(function() {
             limit: limit,
           },
           success: function( data ) {
+            lock = false;
             if (data.length == 0) {
-                end = 1;
+                end = true;
             } else {
                 for (var x = 0; x < data.length; x++) {
                     blurb = data[x].blurb;
                     if (blurb.split(' ').length > 32) {
                         blurb = blurb.split(' ').splice(0,32).join(" ")
                     }
-                    content = "<div class='item'><h3>";
-                    content += data[x].title;
-                    content += "</h3> <img src='";
+                    content = "<div class='item col-md-3'> <div class='sub'> <img class='thumbnail' src='";
+                    content += "";
                     content += data[x].thumbnail_url;
-                    content += "' alt='image";
+                    content += "' alt='thumbnail";
                     content += x;
-                    content += "' width='200'><p class='blurb'>"
+                    content += "' width='200'> <h4>";
+                    content += data[x].title;
+                    content += "</h4> <p class='blurb'>"
                     content += blurb;
                     content += "<a href='";
                     content += data[x].details_url;
                     content += "'> Read More</a></p>";
-                    content += "</div>";
+                    content += "</div></div>";
                     $($.parseHTML(content)).appendTo("#content");
-                   // updateListing(data[x]);
                 }
             }
           },
@@ -47,7 +49,8 @@ $(document).ready(function() {
 
   $(window).on('scroll', function(){
     if( $(window).scrollTop() > $(document).height() - $(window).height() ) {
-        if (end == 0) {
+        if (!end && !lock) {
+            lock = true;
             page = page+1;
             loadContent(page, limit);
         }
