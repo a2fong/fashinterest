@@ -20,7 +20,8 @@ $(document).ready(function() {
                 for (var x = 0; x < data.length; x++) {
                     blurb = data[x].blurb;
                     if (blurb.split(' ').length > 32) {
-                        blurb = blurb.split(' ').splice(0,32).join(" ")
+                        blurb = blurb.split(' ').splice(0,32).join(" ");
+                        blurb += "...";
                     }
                     content = "<div class='item col-md-3'> <div class='sub'> <img class='thumbnail' src='";
                     content += "";
@@ -48,7 +49,7 @@ $(document).ready(function() {
   loadContent(1, 20);
 
   $(window).on('scroll', function(){
-    if( $(window).scrollTop() > $(document).height() - $(window).height() ) {
+    if( $(window).scrollTop() >= $(document).height() - $(window).height() ) {
         if (!end && !lock) {
             lock = true;
             page = page+1;
