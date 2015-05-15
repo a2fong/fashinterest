@@ -1,7 +1,7 @@
 #!flask/bin/python
 from flask import Flask, render_template
-from flask_restful import reqparse, abort, Api, Resource, fields, marshal_with
-from sqlalchemy import Table, MetaData, orm, Column, String, Integer, create_engine
+from flask_restful import reqparse, Api, Resource, fields, marshal_with
+from sqlalchemy import Column, String, Integer, create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -62,14 +62,12 @@ class Fashin(Resource):
 
         session.commit()
 
-
         args = parser.parse_args()
+
         if args['limit'] is None:
             limit = 20
         else:
             limit = args['limit']
-
-        print limit
 
         if args['page'] is None:
             page = 1
@@ -77,9 +75,6 @@ class Fashin(Resource):
             page = args['page']
 
         offset = (page-1) * limit
-
-        print "offset"
-        print offset
 
         q = session.query(FashinDao)
         fashins = q.offset(offset).limit(limit).all()
