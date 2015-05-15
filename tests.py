@@ -12,12 +12,12 @@ class TestCase(unittest.TestCase):
         self.assertNotEqual(response.content, '[]')
 
     def test_get_fashins_empty(self):
-        response = get('http://localhost:5000/api/fashin?page=5')
+        response = get('http://localhost:5000/api/fashin?page=10')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, '[]')
 
     def test_get_fashins_specify_page_limit_empty(self):
-        response = get('http://localhost:5000/api/fashin?page=4&limit=30')
+        response = get('http://localhost:5000/api/fashin?page=10&limit=30')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, '[]')
 
