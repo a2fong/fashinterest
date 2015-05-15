@@ -46,10 +46,27 @@ $(document).ready(function() {
 
       });
   }
+
+  function createContent() {
+      $.ajax({
+          url: "/api/fashin",
+          type: "post",
+          data: {
+          },
+          success: function( data ) {
+
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+          }
+
+      });
+  }
+  createContent();
   loadContent(1, 20);
 
+
   $(window).on('scroll', function(){
-    console.log($(window).scrollTop());
 
     if( $(window).scrollTop() >= $(document).height() - $(window).height()  && $(window).scrollTop() != 0 && !end && !lock) {
         lock = true;
