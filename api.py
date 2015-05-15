@@ -29,24 +29,24 @@ class FashinDao(Base):
     def __repr__(self):
         return '<Fashin %r>' % (self.title)
 
-parser = reqparse.RequestParser()
-parser.add_argument('page', type=int)
-parser.add_argument('limit', type=int)
-
-resource_fields = {
-    'title':   fields.String,
-    'blurb':    fields.String,
-    'author':   fields.String,
-    'thumbnail_url':    fields.String,
-    'details_url':   fields.String
-}
-
 engine = create_engine('sqlite://', echo=True)
 Base.metadata.create_all(engine)
 
 session = Session(engine)
 
 class Fashin(Resource):
+    resource_fields = {
+        'title':   fields.String,
+        'blurb':    fields.String,
+        'author':   fields.String,
+        'thumbnail_url':    fields.String,
+        'details_url':   fields.String
+    }
+
+    parser = reqparse.RequestParser()
+    parser.add_argument('page', type=int)
+    parser.add_argument('limit', type=int)
+
     @marshal_with(resource_fields)
     def get(self):
         args = parser.parse_args()
