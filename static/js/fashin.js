@@ -49,12 +49,12 @@ $(document).ready(function() {
   loadContent(1, 20);
 
   $(window).on('scroll', function(){
-    if( $(window).scrollTop() >= $(document).height() - $(window).height() ) {
-        if (!end && !lock) {
-            lock = true;
-            page = page+1;
-            loadContent(page, limit);
-        }
+    console.log($(window).scrollTop());
+
+    if( $(window).scrollTop() >= $(document).height() - $(window).height()  && $(window).scrollTop() != 0 && !end && !lock) {
+        lock = true;
+        page = page+1;
+        loadContent(page, limit);
     }
   }).scroll();
 });
